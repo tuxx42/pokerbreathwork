@@ -1,0 +1,1315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Own The Inner Game — Poker Performance by Leonie Rössle</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:        #0d0d0f;
+    --bg2:       #111115;
+    --bg3:       #16161b;
+    --border:    rgba(255,255,255,0.07);
+    --text:      #e8e4dc;
+    --muted:     #7a7870;
+    --accent:    #d4ff47;
+    --accent2:   #a8cc2c;
+    --red:       #e05252;
+    --card-bg:   #131318;
+    --radius:    2px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── UTILS ── */
+  .label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    display: block;
+    margin-bottom: 1.25rem;
+  }
+
+  .section {
+    padding: 7rem 1.5rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .section--full {
+    max-width: none;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  h1, h2, h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    letter-spacing: 0.02em;
+    line-height: 1.0;
+  }
+
+  h2 { font-size: clamp(2.4rem, 6vw, 4.5rem); margin-bottom: 1.5rem; }
+  h3 { font-size: clamp(1.4rem, 3vw, 2rem); margin-bottom: 0.75rem; }
+
+  p { max-width: 680px; }
+
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 0;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.25rem 2rem;
+    background: rgba(13,13,15,0.85);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-logo {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text);
+    text-decoration: none;
+  }
+
+  .btn {
+    display: inline-block;
+    padding: 0.6rem 1.4rem;
+    background: var(--accent);
+    color: #0d0d0f;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    border-radius: var(--radius);
+    transition: background 0.15s, transform 0.1s;
+  }
+
+  .btn:hover { background: #bfe83a; transform: translateY(-1px); }
+
+  .btn--large {
+    padding: 1rem 2.5rem;
+    font-size: 13px;
+    letter-spacing: 0.15em;
+  }
+
+  .btn--outline {
+    background: transparent;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+  }
+
+  .btn--outline:hover { background: var(--accent); color: #0d0d0f; }
+
+  /* ── HERO ── */
+  #hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 0 2rem 6rem;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding-top: 100px;
+  }
+
+  .hero-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 1.5rem;
+  }
+
+  .hero-headline {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(4rem, 12vw, 10rem);
+    line-height: 0.92;
+    letter-spacing: 0.01em;
+    margin-bottom: 2rem;
+    max-width: 900px;
+  }
+
+  .hero-headline em {
+    font-style: normal;
+    color: var(--accent);
+  }
+
+  .hero-sub {
+    font-size: clamp(1rem, 2vw, 1.2rem);
+    font-weight: 300;
+    color: var(--muted);
+    max-width: 560px;
+    line-height: 1.65;
+    margin-bottom: 3rem;
+  }
+
+  .hero-cta-group {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+
+  .trust-line {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+  }
+
+  .hero-ticker {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    height: 40px;
+    background: var(--accent);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    z-index: 10;
+  }
+
+  .ticker-track {
+    display: flex;
+    gap: 0;
+    animation: ticker 30s linear infinite;
+    white-space: nowrap;
+  }
+
+  .ticker-track span {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #0d0d0f;
+    padding: 0 2rem;
+  }
+
+  @keyframes ticker {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* ── PROBLEM ── */
+  #problem {
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 7rem 0;
+  }
+
+  #problem .inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  .moment-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0;
+    margin: 3rem 0;
+    border: 1px solid var(--border);
+  }
+
+  .moment-card {
+    padding: 2rem 2rem;
+    border-bottom: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 1.5rem;
+    align-items: start;
+    transition: background 0.15s;
+  }
+
+  .moment-card:last-child { border-bottom: none; }
+
+  .moment-card:hover { background: var(--card-bg); }
+
+  .moment-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    padding-top: 3px;
+  }
+
+  .moment-text {
+    font-size: clamp(1rem, 2.5vw, 1.25rem);
+    line-height: 1.5;
+    font-weight: 300;
+  }
+
+  .moment-text strong {
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  .problem-close {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(1.8rem, 5vw, 3.5rem);
+    line-height: 1.1;
+    letter-spacing: 0.02em;
+    margin-top: 3.5rem;
+    padding-top: 3.5rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .problem-close em {
+    font-style: normal;
+    color: var(--accent);
+  }
+
+  /* ── ROOT CAUSE ── */
+  #root-cause {
+    padding: 7rem 2rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .cause-layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+    margin-top: 3rem;
+  }
+
+  .cause-body {
+    font-size: 1.1rem;
+    font-weight: 300;
+    line-height: 1.75;
+    color: #b0aca4;
+  }
+
+  .cause-callout {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2rem, 5vw, 3.8rem);
+    line-height: 1.05;
+    letter-spacing: 0.02em;
+    border-left: 3px solid var(--accent);
+    padding-left: 2rem;
+  }
+
+  /* ── TRIED ── */
+  #tried {
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 7rem 0;
+  }
+
+  #tried .inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  .tried-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    margin-top: 3rem;
+    border: 1px solid var(--border);
+  }
+
+  .tried-card {
+    background: var(--bg2);
+    padding: 2rem 1.75rem;
+    transition: background 0.15s;
+  }
+
+  .tried-card:hover { background: var(--card-bg); }
+
+  .tried-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .tried-title::before {
+    content: '✕';
+    font-size: 10px;
+  }
+
+  .tried-reason {
+    font-size: 0.9rem;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  /* ── SOLUTION ── */
+  #solution {
+    padding: 7rem 2rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .solution-body {
+    font-size: 1.05rem;
+    color: #b0aca4;
+    font-weight: 300;
+    max-width: 620px;
+    line-height: 1.75;
+    margin-bottom: 4rem;
+  }
+
+  .pillars {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+  }
+
+  .pillar {
+    background: var(--bg);
+    padding: 2.5rem 2rem;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 2rem;
+    align-items: start;
+    transition: background 0.2s;
+  }
+
+  .pillar:hover { background: var(--card-bg); }
+
+  .pillar-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 5rem;
+    line-height: 1;
+    color: rgba(212, 255, 71, 0.12);
+    letter-spacing: 0;
+  }
+
+  .pillar-content {}
+
+  .pillar-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    display: block;
+    margin-bottom: 0.6rem;
+  }
+
+  .pillar h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .pillar p {
+    font-size: 0.95rem;
+    color: var(--muted);
+    line-height: 1.65;
+  }
+
+  /* ── PROGRAM STRUCTURE ── */
+  #structure {
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 7rem 0;
+  }
+
+  #structure .inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  .structure-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    margin-top: 3rem;
+  }
+
+  .struct-item {
+    background: var(--bg2);
+    padding: 2rem;
+    transition: background 0.15s;
+  }
+
+  .struct-item:hover { background: var(--card-bg); }
+
+  .struct-icon {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--accent);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+    display: block;
+  }
+
+  .struct-title {
+    font-size: 1.1rem;
+    font-weight: 500;
+    margin-bottom: 0.4rem;
+    color: var(--text);
+  }
+
+  .struct-detail {
+    font-size: 0.9rem;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+  }
+
+  .struct-detail.placeholder {
+    color: #5a5755;
+    font-style: italic;
+  }
+
+  .editor-note {
+    margin-top: 2rem;
+    padding: 1rem 1.5rem;
+    background: rgba(212,255,71,0.04);
+    border: 1px dashed rgba(212,255,71,0.2);
+    border-radius: var(--radius);
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: rgba(212,255,71,0.5);
+    letter-spacing: 0.05em;
+  }
+
+  /* ── SIX PILLARS ── */
+  #pillars {
+    padding: 7rem 2rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .pillars-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0;
+    margin-top: 3rem;
+    border: 1px solid var(--border);
+  }
+
+  .dimension {
+    padding: 1.75rem 2rem;
+    border-bottom: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: 3ch 1fr;
+    gap: 1.5rem;
+    align-items: start;
+    transition: background 0.15s;
+  }
+
+  .dimension:last-child { border-bottom: none; }
+
+  .dimension:hover { background: var(--card-bg); }
+
+  .dim-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--accent);
+    padding-top: 3px;
+  }
+
+  .dim-content {}
+
+  .dim-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.3rem;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.25rem;
+  }
+
+  .dim-desc {
+    font-size: 0.9rem;
+    color: var(--muted);
+  }
+
+  /* ── TESTIMONIALS ── */
+  #testimonials {
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 7rem 0;
+  }
+
+  #testimonials .inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  .testi-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    margin-top: 3rem;
+  }
+
+  .testi-card {
+    background: var(--bg2);
+    padding: 2.5rem 2rem;
+    transition: background 0.15s;
+  }
+
+  .testi-card:hover { background: var(--card-bg); }
+
+  .testi-placeholder-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #5a5755;
+    border: 1px dashed #3a3835;
+    display: inline-block;
+    padding: 0.25rem 0.6rem;
+    margin-bottom: 1.25rem;
+    border-radius: var(--radius);
+  }
+
+  .testi-quote {
+    font-size: 1.05rem;
+    font-weight: 300;
+    line-height: 1.75;
+    color: #b0aca4;
+    margin-bottom: 1.25rem;
+    font-style: italic;
+  }
+
+  .testi-author {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+  }
+
+  .testi-editor-note {
+    margin-top: 1.5rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: #4a4845;
+    font-style: italic;
+  }
+
+  /* ── WHO IT'S FOR ── */
+  #who {
+    padding: 7rem 2rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .who-cols {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+    margin-top: 3rem;
+  }
+
+  .who-block {}
+
+  .who-block-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+  }
+
+  .who-block-title.yes { color: var(--accent); }
+  .who-block-title.no { color: var(--red); }
+
+  .check-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    border: 1px solid var(--border);
+  }
+
+  .check-list li {
+    padding: 1.1rem 1.5rem;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    font-size: 0.98rem;
+    line-height: 1.55;
+    color: #ccc8c0;
+    transition: background 0.15s;
+  }
+
+  .check-list li:last-child { border-bottom: none; }
+  .check-list li:hover { background: var(--card-bg); }
+
+  .check-list .icon {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    flex-shrink: 0;
+    padding-top: 2px;
+  }
+
+  .check-list .icon.yes { color: var(--accent); }
+  .check-list .icon.no { color: var(--red); }
+
+  /* ── ABOUT ── */
+  #about {
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 7rem 0;
+  }
+
+  #about .inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .about-placeholder {
+    font-size: 1.05rem;
+    color: #5a5755;
+    font-style: italic;
+    line-height: 1.75;
+    border-left: 2px dashed #3a3835;
+    padding-left: 1.5rem;
+  }
+
+  /* ── FAQ ── */
+  #faq {
+    padding: 7rem 2rem;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .faq-list {
+    margin-top: 3rem;
+    border: 1px solid var(--border);
+  }
+
+  .faq-item {
+    border-bottom: 1px solid var(--border);
+  }
+
+  .faq-item:last-child { border-bottom: none; }
+
+  .faq-question {
+    width: 100%;
+    background: none;
+    border: none;
+    padding: 1.75rem 2rem;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    cursor: pointer;
+    text-align: left;
+    color: var(--text);
+    font-size: 1rem;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 500;
+    line-height: 1.5;
+    transition: background 0.15s;
+  }
+
+  .faq-question:hover { background: var(--card-bg); }
+
+  .faq-arrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 14px;
+    color: var(--accent);
+    flex-shrink: 0;
+    transition: transform 0.25s;
+  }
+
+  .faq-item.open .faq-arrow { transform: rotate(90deg); }
+
+  .faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.35s ease, padding 0.2s;
+    padding: 0 2rem;
+  }
+
+  .faq-item.open .faq-answer {
+    max-height: 300px;
+    padding: 0 2rem 1.75rem;
+  }
+
+  .faq-answer p {
+    font-size: 0.95rem;
+    color: var(--muted);
+    line-height: 1.75;
+  }
+
+  /* ── FINAL CTA ── */
+  #apply {
+    background: var(--bg3);
+    border-top: 1px solid var(--border);
+    padding: 10rem 2rem;
+    text-align: center;
+  }
+
+  #apply .label { text-align: center; display: block; }
+
+  .cta-headline {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(4rem, 12vw, 9rem);
+    line-height: 0.95;
+    letter-spacing: 0.01em;
+    margin-bottom: 1.5rem;
+  }
+
+  .cta-sub {
+    font-size: 1.05rem;
+    color: var(--muted);
+    max-width: 480px;
+    margin: 0 auto 3rem;
+    font-weight: 300;
+  }
+
+  .cta-trust {
+    display: block;
+    margin-top: 1.25rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: #4a4845;
+    letter-spacing: 0.1em;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--bg);
+    border-top: 1px solid var(--border);
+    padding: 2.5rem 2rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .footer-brand {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .footer-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+  }
+
+  .footer-links a {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    text-decoration: none;
+    letter-spacing: 0.1em;
+    transition: color 0.15s;
+  }
+
+  .footer-links a:hover { color: var(--accent); }
+
+  .footer-copy {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: #3a3835;
+    letter-spacing: 0.1em;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (min-width: 640px) {
+    .moment-card { padding: 2rem 2.5rem; }
+
+    .pillars { grid-template-columns: 1fr; }
+
+    .testi-grid { grid-template-columns: repeat(3, 1fr); }
+
+    .who-cols { grid-template-columns: 1fr 1fr; }
+  }
+
+  @media (min-width: 860px) {
+    .pillars-grid { grid-template-columns: repeat(2, 1fr); }
+
+    .dimension { padding: 2rem 2.5rem; }
+
+    .cause-layout { grid-template-columns: 1fr 1fr; align-items: center; }
+
+    .pillars { grid-template-columns: repeat(3, 1fr); }
+
+    #about .inner { grid-template-columns: 1fr 1.8fr; align-items: start; }
+  }
+
+  /* ── ENTRANCE ANIMATIONS ── */
+  .fade-up {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+
+  .fade-up.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">Own The Inner Game</a>
+  <a href="#apply" class="btn">Apply Now</a>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-eyebrow">Poker Performance Program · Leonie Rössle</div>
+  <h1 class="hero-headline">The game is decided<br><em>before</em> you sit down.</h1>
+  <p class="hero-sub">Your reads are sharp. Your strategy is solid. But under pressure, your nervous system overrides everything — and you already know it.</p>
+  <div class="hero-cta-group">
+    <a href="#apply" class="btn btn--large">Apply for Own The Inner Game →</a>
+    <span class="trust-line">No commitment. A 20-minute call to find out if it's a fit.</span>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="hero-ticker" aria-hidden="true">
+  <div class="ticker-track">
+    <span>Nervous System Regulation</span><span>·</span>
+    <span>High-Stakes Performance</span><span>·</span>
+    <span>Pressure Capacity</span><span>·</span>
+    <span>Player Identity</span><span>·</span>
+    <span>Somatic Protocol</span><span>·</span>
+    <span>English & German</span><span>·</span>
+    <span>Nervous System Regulation</span><span>·</span>
+    <span>·</span>
+    <span>High-Stakes Performance</span><span>·</span>
+    <span>Pressure Capacity</span><span>·</span>
+    <span>Player Identity</span><span>·</span>
+    <span>Somatic Protocol</span><span>·</span>
+    <span>English & German</span><span>·</span>
+  </div>
+</div>
+
+<hr class="divider" style="margin-top: 40px;">
+
+<!-- PROBLEM -->
+<section id="problem">
+  <div class="inner">
+    <span class="label">The Problem</span>
+    <h2 class="fade-up">Let's be<br>honest.</h2>
+
+    <div class="moment-grid">
+      <div class="moment-card fade-up">
+        <span class="moment-num">01</span>
+        <p class="moment-text"><strong>Big pot →</strong> chest tightens → you lose your read</p>
+      </div>
+      <div class="moment-card fade-up">
+        <span class="moment-num">02</span>
+        <p class="moment-text"><strong>Bad beat →</strong> breathing goes shallow → next three hands are compromised</p>
+      </div>
+      <div class="moment-card fade-up">
+        <span class="moment-num">03</span>
+        <p class="moment-text"><strong>Tournament bubble →</strong> body screams danger → you play scared</p>
+      </div>
+      <div class="moment-card fade-up">
+        <span class="moment-num">04</span>
+        <p class="moment-text"><strong>Deep run pressure →</strong> overthinking every decision → you miss what's obvious</p>
+      </div>
+    </div>
+
+    <p class="problem-close fade-up">This isn't a strategy problem.<br><em>It's a physiology problem.</em></p>
+  </div>
+</section>
+
+<!-- ROOT CAUSE -->
+<section>
+  <div id="root-cause">
+    <span class="label">Root Cause</span>
+    <h2 class="fade-up">Your nervous system doesn't know it's a poker hand.</h2>
+
+    <div class="cause-layout">
+      <p class="cause-body fade-up">
+        Fight-or-flight evolved for survival. It can't tell the difference between a lion and a $50k pot. When it activates, access to higher thinking narrows — and that's where your edge disappears. Your pattern recognition, your reads, your game-theory optimal decisions — all of it runs on hardware that gets throttled under threat response.
+      </p>
+      <div class="cause-callout fade-up">
+        No solver<br>fixes a hijacked<br>nervous system.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT YOU'VE TRIED -->
+<section id="tried">
+  <div class="inner">
+    <span class="label">What You've Tried</span>
+    <h2 class="fade-up">You've tried everything.</h2>
+
+    <div class="tried-grid">
+      <div class="tried-card fade-up">
+        <div class="tried-title">More Study</div>
+        <p class="tried-reason">Your brain knows the right play. The problem isn't information.</p>
+      </div>
+      <div class="tried-card fade-up">
+        <div class="tried-title">Just Relax</div>
+        <p class="tried-reason">Advice that helps no one when your heart rate spikes at 140bpm.</p>
+      </div>
+      <div class="tried-card fade-up">
+        <div class="tried-title">Meditation Apps</div>
+        <p class="tried-reason">Calm in a quiet room doesn't transfer to a $50k pot.</p>
+      </div>
+      <div class="tried-card fade-up">
+        <div class="tried-title">Powering Through</div>
+        <p class="tried-reason">Grit without regulation is just compounded stress.</p>
+      </div>
+      <div class="tried-card fade-up">
+        <div class="tried-title">Mindset Work</div>
+        <p class="tried-reason">Reframing thoughts doesn't reset a nervous system already in crisis.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SOLUTION -->
+<section id="solution">
+  <span class="label">The Solution</span>
+  <h2 class="fade-up">The only performance<br>program built on nervous<br>system regulation.</h2>
+  <p class="solution-body fade-up">Not mindset work. Not strategy. Not meditation. A protocol that works at the level of physiology, pattern, and identity — so your skill is actually accessible when it matters.</p>
+
+  <div class="pillars">
+    <div class="pillar fade-up">
+      <div class="pillar-num">01</div>
+      <div class="pillar-content">
+        <span class="pillar-tag">Regulate</span>
+        <h3>Rewire Your Stress Response</h3>
+        <p>So pressure becomes fuel, not poison. Build the physiological baseline that holds under fire.</p>
+      </div>
+    </div>
+    <div class="pillar fade-up">
+      <div class="pillar-num">02</div>
+      <div class="pillar-content">
+        <span class="pillar-tag">Perform</span>
+        <h3>Access Your Full Skill Set</h3>
+        <p>On demand, even in the biggest spots. Your edge is there — learn to reach it when it counts.</p>
+      </div>
+    </div>
+    <div class="pillar fade-up">
+      <div class="pillar-num">03</div>
+      <div class="pillar-content">
+        <span class="pillar-tag">Evolve</span>
+        <h3>Become the Player Who Doesn't Break</h3>
+        <p>At any stakes, in any session. Identity-level change — not just in-the-moment coping.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROGRAM STRUCTURE -->
+<section id="structure">
+  <div class="inner">
+    <span class="label">Program Structure</span>
+    <h2 class="fade-up">What's inside<br>the program</h2>
+
+    <div class="structure-grid">
+      <div class="struct-item fade-up">
+        <span class="struct-icon">Format</span>
+        <div class="struct-title">1:1 Coaching Sessions</div>
+        <div class="struct-detail">Private, focused, tailored to your game</div>
+      </div>
+      <div class="struct-item fade-up">
+        <span class="struct-icon">Duration</span>
+        <div class="struct-title placeholder-block">
+          <span class="struct-detail placeholder">[X weeks — Leonie to confirm]</span>
+        </div>
+      </div>
+      <div class="struct-item fade-up">
+        <span class="struct-icon">Cadence</span>
+        <div class="struct-title placeholder-block">
+          <span class="struct-detail placeholder">[X sessions/week — Leonie to confirm]</span>
+        </div>
+      </div>
+      <div class="struct-item fade-up">
+        <span class="struct-icon">Includes</span>
+        <div class="struct-title">Full Protocol Suite</div>
+        <div class="struct-detail">Breathwork, somatic tools, identity work, between-session support</div>
+      </div>
+      <div class="struct-item fade-up">
+        <span class="struct-icon">Language</span>
+        <div class="struct-title">English & German</div>
+        <div class="struct-detail">Sessions available in both languages</div>
+      </div>
+    </div>
+
+    <div class="editor-note">✎ Leonie: confirm program format, session count, and duration before launch.</div>
+  </div>
+</section>
+
+<!-- SIX PILLARS -->
+<section id="pillars">
+  <span class="label">What Changes</span>
+  <h2 class="fade-up">The six dimensions<br>of inner game mastery</h2>
+
+  <div class="pillars-grid">
+    <div class="dimension fade-up">
+      <span class="dim-num">01</span>
+      <div class="dim-content">
+        <div class="dim-name">Pattern Awareness</div>
+        <p class="dim-desc">See your triggers before they see you</p>
+      </div>
+    </div>
+    <div class="dimension fade-up">
+      <span class="dim-num">02</span>
+      <div class="dim-content">
+        <div class="dim-name">Physiology</div>
+        <p class="dim-desc">Control what happens in your body under pressure</p>
+      </div>
+    </div>
+    <div class="dimension fade-up">
+      <span class="dim-num">03</span>
+      <div class="dim-content">
+        <div class="dim-name">Stress Response</div>
+        <p class="dim-desc">Reset faster. Recover fully.</p>
+      </div>
+    </div>
+    <div class="dimension fade-up">
+      <span class="dim-num">04</span>
+      <div class="dim-content">
+        <div class="dim-name">Pressure Capacity</div>
+        <p class="dim-desc">Play your A-game in spots that used to break you</p>
+      </div>
+    </div>
+    <div class="dimension fade-up">
+      <span class="dim-num">05</span>
+      <div class="dim-content">
+        <div class="dim-name">Emotional Patterns</div>
+        <p class="dim-desc">Stop replaying bad beats in real time</p>
+      </div>
+    </div>
+    <div class="dimension fade-up">
+      <span class="dim-num">06</span>
+      <div class="dim-content">
+        <div class="dim-name">Player Identity</div>
+        <p class="dim-desc">Be the player you already know you can be</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="testimonials">
+  <div class="inner">
+    <span class="label">Results</span>
+    <h2 class="fade-up">What players say</h2>
+
+    <div class="testi-grid">
+      <div class="testi-card fade-up">
+        <span class="testi-placeholder-badge">Placeholder</span>
+        <p class="testi-quote">"After 3 sessions I noticed I was breathing through tough spots instead of freezing. My decisions in big pots got cleaner."</p>
+        <div class="testi-author">Marco · $25/$50 online</div>
+      </div>
+      <div class="testi-card fade-up">
+        <span class="testi-placeholder-badge">Placeholder</span>
+        <p class="testi-quote" style="color: #4a4845; font-style: italic;">[Leonie: add second player testimonial — name, stakes, format, 2–3 sentence result]</p>
+        <div class="testi-author" style="color: #4a4845;">— · —</div>
+      </div>
+      <div class="testi-card fade-up">
+        <span class="testi-placeholder-badge">Placeholder</span>
+        <p class="testi-quote" style="color: #4a4845; font-style: italic;">[Leonie: add third player testimonial — name, stakes, format, 2–3 sentence result]</p>
+        <div class="testi-author" style="color: #4a4845;">— · —</div>
+      </div>
+    </div>
+
+    <p class="testi-editor-note">* Testimonials to be confirmed with Leonie before launch.</p>
+  </div>
+</section>
+
+<!-- WHO IT'S FOR -->
+<section id="who">
+  <span class="label">Is This For You</span>
+  <h2 class="fade-up">This is for you if...</h2>
+
+  <div class="who-cols">
+    <div class="who-block fade-up">
+      <div class="who-block-title yes">✓ Right fit</div>
+      <ul class="check-list">
+        <li><span class="icon yes">✓</span>You play $10/$25 or higher (cash) or $500+ buy-ins (tournaments)</li>
+        <li><span class="icon yes">✓</span>You have the skills but not always the access to them</li>
+        <li><span class="icon yes">✓</span>You've tried mindset work and it didn't stick</li>
+        <li><span class="icon yes">✓</span>You want a measurable edge, not inspiration</li>
+        <li><span class="icon yes">✓</span>You're ready to treat your mental game like you treat your strategy game</li>
+      </ul>
+    </div>
+    <div class="who-block fade-up">
+      <div class="who-block-title no">✕ Not the right fit</div>
+      <ul class="check-list">
+        <li><span class="icon no">✕</span>You're looking for quick fixes or motivation content</li>
+        <li><span class="icon no">✕</span>You want theory without practice</li>
+        <li><span class="icon no">✕</span>You're not ready to do the actual work</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT LEONIE -->
+<section id="about">
+  <div class="inner">
+    <div>
+      <span class="label">Your Coach</span>
+      <h2 class="fade-up">Who runs<br>this program</h2>
+    </div>
+    <div>
+      <p class="about-placeholder fade-up">
+        [LEONIE: Add 3–4 sentence credibility bio here. Include: your background in nervous system work, why you work specifically with poker players, your methodology, and any relevant credentials or experience. Keep it direct — establish trust, not a life story.]
+      </p>
+      <div class="editor-note" style="margin-top: 1.5rem;">✎ Bio to be supplied by Leonie before launch.</div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+  <span class="label">FAQ</span>
+  <h2 class="fade-up">Common questions</h2>
+
+  <div class="faq-list">
+    <div class="faq-item">
+      <button class="faq-question" aria-expanded="false">
+        <span>Is this just meditation?</span>
+        <span class="faq-arrow">›</span>
+      </button>
+      <div class="faq-answer">
+        <p>No. Meditation is one tool among many, and most meditation practices don't transfer to high-pressure in-game moments. This program uses somatic regulation — working directly with your body's stress response — which is faster and more reliable under acute pressure.</p>
+      </div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-question" aria-expanded="false">
+        <span>I've tried mindset coaches before and it didn't work.</span>
+        <span class="faq-arrow">›</span>
+      </button>
+      <div class="faq-answer">
+        <p>Most mindset work operates at the level of thoughts. The problem is that when your nervous system activates, the thinking brain loses priority. This program addresses the physiology first — so you can actually access clear thinking when it matters.</p>
+      </div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-question" aria-expanded="false">
+        <span>How long until I see results?</span>
+        <span class="faq-arrow">›</span>
+      </button>
+      <div class="faq-answer">
+        <p>Most players notice changes in their in-game response within the first few weeks. Deep pattern-level changes take longer. The program is designed to build lasting capacity, not just temporary relief.</p>
+      </div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-question" aria-expanded="false">
+        <span>Is this available online?</span>
+        <span class="faq-arrow">›</span>
+      </button>
+      <div class="faq-answer">
+        <p>Yes. Sessions are conducted online, in English or German.</p>
+      </div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-question" aria-expanded="false">
+        <span>What does it cost?</span>
+        <span class="faq-arrow">›</span>
+      </button>
+      <div class="faq-answer">
+        <p>Pricing is discussed during your application call. Spots are limited to ensure program quality.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section id="apply" style="padding: 10rem 2rem; text-align: center; background: var(--bg3); border-top: 1px solid var(--border);">
+  <span class="label" style="display:block; text-align:center;">Apply</span>
+  <h2 class="cta-headline fade-up" style="font-size: clamp(4rem, 12vw, 9rem); margin-bottom: 1.5rem;">Ready to own it?</h2>
+  <p class="cta-sub fade-up">Spots are limited. Apply to see if Own The Inner Game is right for you.</p>
+  <a href="#apply" class="btn btn--large fade-up">Apply Now →</a>
+  <span class="cta-trust">No commitment. A 20-minute call to find out if it's a fit.</span>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">Own The Inner Game · Leonie Rössle</div>
+  <ul class="footer-links">
+    <li><a href="https://leonieroessle.de" target="_blank" rel="noopener">leonieroessle.de</a></li>
+  </ul>
+  <div class="footer-copy">© 2025 Leonie Rössle. All rights reserved.</div>
+</footer>
+
+<script>
+  // FAQ Accordion
+  document.querySelectorAll('.faq-question').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const item = btn.closest('.faq-item');
+      const isOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item.open').forEach(el => el.classList.remove('open'));
+      if (!isOpen) item.classList.add('open');
+      btn.setAttribute('aria-expanded', !isOpen);
+    });
+  });
+
+  // Scroll-triggered fade-up
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
