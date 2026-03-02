@@ -22,8 +22,8 @@ export default async function Home() {
     <>
       <Nav
         isSignedIn={!!session}
-        isPaid={session?.user.isPaid}
-        hasApplication={!!session?.user.applicationStatus}
+        isPaid={session?.user?.isPaid}
+        hasApplication={!!session?.user?.applicationStatus}
       />
       <Hero />
       <Ticker />
